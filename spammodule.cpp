@@ -14,7 +14,7 @@ static PyObject *
 spam_system(PyObject *self, PyObject * args)
 {
 
-	unordered_map<string, string> Graph;
+	unordered_map<string, unordered_set<string>> Graph;
 
 	PyObject *large_dict = NULL;
 	PyObject *lol = NULL;
@@ -24,18 +24,20 @@ spam_system(PyObject *self, PyObject * args)
 	if (large_dict != NULL)
 	{	
 	   printf("\nprior\n" );
-	   lol = PyDict_GetItemString(large_dict, "a");
+	   lol = PyDict_GetItemString(large_dict, "A");
 	   PyObject* objectsRepresentation = PyObject_Repr(lol);
 	   PyObject *pKeys = PyDict_Keys(large_dict); // new reference
 
 	   for(int i = 0; i < PyList_Size(pKeys); ++i) 
     	{
-
-	        PyObject *pValue = PyDict_GetItem(large_dict, PyList_GetItem(pKeys, i)); // borrowed reference
+	        PyObject *pKey = PyList_GetItem(pKeys, i); // borrowed reference
+	        PyObject *pValue = PyDict_GetItem(large_dict, pKey); // borrowed reference
+	        Graph[PyString_AsString(pKey)] = {};
 	        for(int j = 0; j < PyList_Size(pValue); ++j){
-	        	cout << j;
+	        	cout << j << "  KEK  " << "\n";
+	        	cout << "   " << PyString_AsString(PyList_GetItem(pValue, j)) << "\n";
+	        	Graph[PyString_AsString(pKey)].insert(PyString_AsString(PyList_GetItem(pValue, j)));
 	        }
-	        //Graph[PyString_AsString(pKey)] = "test";
 	        // cout << "KEY "<< PyString_AsString(pKey) << std::endl;
 	        //assert(pValue);
     	}
@@ -45,6 +47,7 @@ spam_system(PyObject *self, PyObject * args)
 
 	   printf("%s\n", s );
 	   printf("Large Dictionary Not Null\n");
+	   cout << "\n" << *(Graph["A"].begin()) << "  KEK" << "\n";
 	   //printf("%s\n", large_dict);
 	   return Py_BuildValue("i", 0);
 	}
