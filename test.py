@@ -1,2 +1,2 @@
 import spam
-spam.system({"a":"1"})
+spam.system({"a":["1"]})

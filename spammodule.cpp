@@ -1,27 +1,47 @@
 #include <Python.h>
+#include <unordered_map>
+#include <unordered_set>
+
+#include <iostream>
+
+// #include "boost/unordered_map.hpp"
+
+using namespace std;
 
 static PyObject * SpamError;
 
 static PyObject *
 spam_system(PyObject *self, PyObject * args)
 {
-	const char *command;
-	int sts;
 
-	// if(!PyArg_ParseTuple(args, "s", &command))
-	// 	return NULL;
-	//char *key;
-	//*key = 'a';
+	unordered_map<string, string> Graph;
 
 	PyObject *large_dict = NULL;
 	PyObject *lol = NULL;
+
 	if (! PyArg_ParseTuple( args, "O!", &PyDict_Type, &large_dict)) return NULL;
+	
 	if (large_dict != NULL)
 	{	
 	   printf("\nprior\n" );
 	   lol = PyDict_GetItemString(large_dict, "a");
 	   PyObject* objectsRepresentation = PyObject_Repr(lol);
-		const char* s = PyString_AsString(objectsRepresentation);
+	   PyObject *pKeys = PyDict_Keys(large_dict); // new reference
+
+	   for(int i = 0; i < PyList_Size(pKeys); ++i) 
+    	{
+
+	        PyObject *pValue = PyDict_GetItem(large_dict, PyList_GetItem(pKeys, i)); // borrowed reference
+	        for(int j = 0; j < PyList_Size(pValue); ++j){
+	        	cout << j;
+	        }
+	        //Graph[PyString_AsString(pKey)] = "test";
+	        // cout << "KEY "<< PyString_AsString(pKey) << std::endl;
+	        //assert(pValue);
+    	}
+	   
+	   Py_DECREF(pKeys);
+	   const char* s = PyString_AsString(objectsRepresentation);
 
 	   printf("%s\n", s );
 	   printf("Large Dictionary Not Null\n");
