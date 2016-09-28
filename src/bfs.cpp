@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <unordered_map>
 #include <unordered_set>
-
+#include <deque>
 #include <iostream>
 
 // #include "boost/unordered_map.hpp"
@@ -10,8 +10,33 @@ using namespace std;
 
 static PyObject * SpamError;
 
+void BFS(unordered_map<string,unordered_set<string>> &graph, string node){
+
+    deque<string> que = {node};
+    unordered_set<string> cache = {node};
+
+    while( !(que.empty()) ){
+
+        string cur_node = que.front();
+        que.pop_front();
+
+        unordered_set<string> children = graph[cur_node];
+        for(unordered_set<string>::iterator a = children.begin(); a != children.end(); ++a) {
+            string child = *a;
+
+            const bool b = !(cache.find(child) != cache.end());
+            if(b ) {
+                cout << child << endl;
+                que.push_back(child);
+                cache.insert(child);
+            }
+        }
+
+    }
+}
+
 static PyObject *
-spam_system(PyObject *self, PyObject * args)
+transfer_adj_bfs(PyObject *self, PyObject * args)
 {
 
 	unordered_map<string, unordered_set<string>> Graph;
@@ -19,11 +44,15 @@ spam_system(PyObject *self, PyObject * args)
 	PyObject *large_dict = NULL;
 	PyObject *lol = NULL;
 
-	if (! PyArg_ParseTuple( args, "O!", &PyDict_Type, &large_dict)) return NULL;
+	const char *root;
+
+
+
+	if (! PyArg_ParseTuple( args, "O!s", &PyDict_Type, &large_dict, &root)) return NULL;
 	
 	if (large_dict != NULL)
 	{	
-	   printf("\nprior\n" );
+
 	   lol = PyDict_GetItemString(large_dict, "A");
 	   PyObject* objectsRepresentation = PyObject_Repr(lol);
 	   PyObject *pKeys = PyDict_Keys(large_dict); // new reference
@@ -34,43 +63,35 @@ spam_system(PyObject *self, PyObject * args)
 	        PyObject *pValue = PyDict_GetItem(large_dict, pKey); // borrowed reference
 	        Graph[PyString_AsString(pKey)] = {};
 	        for(int j = 0; j < PyList_Size(pValue); ++j){
-	        	cout << j << "  KEK  " << "\n";
-	        	cout << "   " << PyString_AsString(PyList_GetItem(pValue, j)) << "\n";
 	        	Graph[PyString_AsString(pKey)].insert(PyString_AsString(PyList_GetItem(pValue, j)));
 	        }
-	        // cout << "KEY "<< PyString_AsString(pKey) << std::endl;
-	        //assert(pValue);
     	}
 	   
 	   Py_DECREF(pKeys);
-	   const char* s = PyString_AsString(objectsRepresentation);
 
-	   printf("%s\n", s );
-	   printf("Large Dictionary Not Null\n");
-	   cout << "\n" << *(Graph["A"].begin()) << "  KEK" << "\n";
-	   //printf("%s\n", large_dict);
+	   BFS(Graph, root);
 	   return Py_BuildValue("i", 0);
 	}
 
 }
 
 PyMODINIT_FUNC
-initspam(void)
+initbfs_c(void)
 {
 	PyObject *m;
 	static PyMethodDef SpamMethods[] = {
-		{"system", spam_system, METH_VARARGS, "Execute a shell command."},
+		{"bfs", transfer_adj_bfs, METH_VARARGS, "FAST C++ BFS"},
 		{NULL, NULL, 0, NULL}
 	};
-	printf("HAS\n" );
-	m = Py_InitModule("spam", SpamMethods);
-	printf("\nHos\n" );
+
+	m = Py_InitModule("bfs_c", SpamMethods);
+
 	if ( m == NULL )
 		return;
-	printf("\nHos\n" );
-	SpamError = PyErr_NewException("spam.error", NULL, NULL);
+
+	SpamError = PyErr_NewException("bfs_c.error", NULL, NULL);
 	Py_INCREF(SpamError);
-	printf("\nHSs\n" );
+
 	PyModule_AddObject(m, "error", SpamError);
 }
 
@@ -79,6 +100,6 @@ main(int argc, char *argv[])
 {
 	Py_SetProgramName(argv[0]);
 	Py_Initialize();
-	initspam();
+	initbfs_c();
 }
 
