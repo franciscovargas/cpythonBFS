@@ -24,9 +24,9 @@ void BFS(unordered_map<string,unordered_set<string>> &graph, string node){
         for(unordered_set<string>::iterator a = children.begin(); a != children.end(); ++a) {
             string child = *a;
 
-            const bool b = !(cache.find(child) != cache.end());
+            const bool b = (cache.find(child) == cache.end());
             if(b ) {
-                cout << child << endl;
+                //cout << child << endl;
                 que.push_back(child);
                 cache.insert(child);
             }
