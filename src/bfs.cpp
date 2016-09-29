@@ -27,7 +27,7 @@ void BFS(unordered_map<string,unordered_set<string>> &graph, string node){
 
             const bool b = (cache.find(child) == cache.end());
             if(b ) {
-                //cout << child << endl;
+
                 que.push_back(child);
                 cache.insert(child);
             }
@@ -53,14 +53,12 @@ static PyObject * transfer_adj_bfs(PyObject *self, PyObject * args)
 	if (large_dict != NULL)
 	{	
 	   
-	   lol = PyDict_GetItemString(large_dict, "A");
-	   PyObject* objectsRepresentation = PyObject_Repr(lol);
-	   PyObject *pKeys = PyDict_Keys(large_dict); // new reference
+	   PyObject *pKeys = PyDict_Keys(large_dict); // new ref
 
 	   for(int i = 0; i < PyList_Size(pKeys); ++i) 
     	{
-	        PyObject *pKey = PyList_GetItem(pKeys, i); // borrowed reference
-	        PyObject *pValue = PyDict_GetItem(large_dict, pKey); // borrowed reference
+	        PyObject *pKey = PyList_GetItem(pKeys, i); // borrowed ref
+	        PyObject *pValue = PyDict_GetItem(large_dict, pKey); // borrowed ref
 	        Graph[PyString_AsString(pKey)] = {};
 	        for(int j = 0; j < PyList_Size(pValue); ++j){
 	        	Graph[PyString_AsString(pKey)].insert(PyString_AsString(PyList_GetItem(pValue, j)));
@@ -68,20 +66,12 @@ static PyObject * transfer_adj_bfs(PyObject *self, PyObject * args)
     	}
 	   
 	   Py_DECREF(pKeys);
-	   // long int t = static_cast<long int> time(NULL);
-	   // time_t timer;
-	   // struct tm y2k = {0};
-	   // long long seconds;
+
 	   const clock_t begin_time = clock();
-// do something
-	   // time(&timer); 
-	   // time_t t1 = time(NULL);
+
 	   BFS(Graph, root);
 	   float sx = float( clock () - begin_time ) /  CLOCKS_PER_SEC;
-	   // std::cout << sx << endl;
-	   // time_t t2 =  time(NULL);
-	
-	   // cout << seconds << "KEK" << endl;
+
 	   return Py_BuildValue("d", sx);
 	}
 

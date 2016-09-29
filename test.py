@@ -51,6 +51,9 @@ if __name__ == "__main__":
        # print t22
        # t22 = time.time() - t2
        times.append((t12, t22))
-   plt.plot([x for x,y in times], '-or')
-   plt.plot([y for x,y in times], '-ob')
+   plt.plot([x for x,y in times], '-or', label="Python")
+   plt.plot([y for x,y in times], '-ob', label="C++")
+   plt.ylabel("seconds")
+   plt.xlabel("number of nodes \n on complete graph")
+   plt.legend()
    plt.show()
