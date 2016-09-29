@@ -16,5 +16,5 @@ bfs(adj_list, root)
 
 ```
 
-![](https://github.com/franciscovargas/cpythonBFS/blob/master/benchmakr_imgs/small.png)
+![](https://github.com/franciscovargas/cpythonBFS/blob/master/benchmakr_imgs/big.png)
 

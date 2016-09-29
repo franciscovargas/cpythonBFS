@@ -38,7 +38,8 @@ def BFS2(G):
 if __name__ == "__main__":
    import matplotlib.pyplot as plt
    times= list()
-   for index in xrange(1, 500,10):
+   ax = list()
+   for index in xrange(1, 1000,10):
        G = nx.complete_graph(index)
        G = nx.to_dict_of_lists(G)
        G = {str(k):[str(i) for i in v] for k,v in G.items()}
@@ -50,9 +51,10 @@ if __name__ == "__main__":
        t22 = bfs(G, G.keys()[0])
        # print t22
        # t22 = time.time() - t2
+       ax.append(index)
        times.append((t12, t22))
-   plt.plot([x for x,y in times], '-or', label="Python")
-   plt.plot([y for x,y in times], '-ob', label="C++")
+   plt.plot(ax, [x for x,y in times], '-or', label="Python")
+   plt.plot(ax, [y for x,y in times], '-ob', label="C++")
    plt.ylabel("seconds")
    plt.xlabel("number of nodes \n on complete graph")
    plt.legend()
