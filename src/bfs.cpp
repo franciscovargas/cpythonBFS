@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <deque>
 #include <iostream>
+#include <ctime>
 
 // #include "boost/unordered_map.hpp"
 
@@ -35,8 +36,7 @@ void BFS(unordered_map<string,unordered_set<string>> &graph, string node){
     }
 }
 
-static PyObject *
-transfer_adj_bfs(PyObject *self, PyObject * args)
+static PyObject * transfer_adj_bfs(PyObject *self, PyObject * args)
 {
 
 	unordered_map<string, unordered_set<string>> Graph;
@@ -52,7 +52,7 @@ transfer_adj_bfs(PyObject *self, PyObject * args)
 	
 	if (large_dict != NULL)
 	{	
-
+	   
 	   lol = PyDict_GetItemString(large_dict, "A");
 	   PyObject* objectsRepresentation = PyObject_Repr(lol);
 	   PyObject *pKeys = PyDict_Keys(large_dict); // new reference
@@ -68,16 +68,26 @@ transfer_adj_bfs(PyObject *self, PyObject * args)
     	}
 	   
 	   Py_DECREF(pKeys);
-
+	   // long int t = static_cast<long int> time(NULL);
+	   // time_t timer;
+	   // struct tm y2k = {0};
+	   // long long seconds;
+	   const clock_t begin_time = clock();
+// do something
+	   // time(&timer); 
+	   // time_t t1 = time(NULL);
 	   BFS(Graph, root);
-	   return Py_BuildValue("i", 0);
+	   float sx = float( clock () - begin_time ) /  CLOCKS_PER_SEC;
+	   // std::cout << sx << endl;
+	   // time_t t2 =  time(NULL);
+	
+	   // cout << seconds << "KEK" << endl;
+	   return Py_BuildValue("d", sx);
 	}
 
 }
 
-PyMODINIT_FUNC
-initbfs_c(void)
-{
+PyMODINIT_FUNC initbfs_c(void){
 	PyObject *m;
 	static PyMethodDef SpamMethods[] = {
 		{"bfs", transfer_adj_bfs, METH_VARARGS, "FAST C++ BFS"},
@@ -95,9 +105,7 @@ initbfs_c(void)
 	PyModule_AddObject(m, "error", SpamError);
 }
 
-int
-main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
 	Py_SetProgramName(argv[0]);
 	Py_Initialize();
 	initbfs_c();

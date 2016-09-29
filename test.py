@@ -47,8 +47,9 @@ if __name__ == "__main__":
        BFS1(G)
        t12 = time.time()- t1
        t2 = time.time()
-       bfs(G, G.keys()[0])
-       t22 = time.time() - t2
+       t22 = bfs(G, G.keys()[0])
+       # print t22
+       # t22 = time.time() - t2
        times.append((t12, t22))
    plt.plot([x for x,y in times], '-or')
    plt.plot([y for x,y in times], '-ob')
