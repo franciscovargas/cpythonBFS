@@ -21,7 +21,7 @@ bfs(adj_list, root)
 
 running
 
-    test.py
+    python test.py
 
 
 gives:
