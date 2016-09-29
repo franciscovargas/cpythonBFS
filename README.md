@@ -16,5 +16,5 @@ bfs(adj_list, root)
 
 ```
 
-!(benchmakr_imgs/final_kek.png)[]
+![](benchmakr_imgs/final_kek.png)
 
