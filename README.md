@@ -16,5 +16,5 @@ bfs(adj_list, root)
 
 ```
 
-![](benchmakr_imgs/final_kek.png)
+![](https://github.com/franciscovargas/cpythonBFS/blob/master/benchmakr_imgs/final_kek.png)
 
